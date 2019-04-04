@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/deckarep/gosx-notifier"
 	"github.com/radovskyb/watcher"
 	"golang.org/x/xerrors"
 )
@@ -18,8 +19,8 @@ func Run() error {
 
 		msgs, err := runTest()
 		if len(msgs) > 0 {
-			for _, m := range msgs {
-				log.Printf("%v\n", m)
+			if err := showNotification(msgs[0]); err != nil {
+				log.Printf("Notification error: %+v\n", err)
 			}
 		} else if err != nil {
 			log.Printf("Error: %v\n", err)
@@ -73,4 +74,10 @@ func runTest() ([]string, error) {
 		}
 	}
 	return errorMsgs, err
+}
+
+func showNotification(msg string) error {
+	note := gosxnotifier.NewNotification(msg)
+	note.Title = "Test failed."
+	return note.Push()
 }
