@@ -2,7 +2,9 @@ package yagisan
 
 import (
 	"log"
+	"os/exec"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/radovskyb/watcher"
@@ -13,6 +15,15 @@ import (
 func Run() error {
 	return watchFileWrite(func(path string) {
 		log.Printf("File change: %v\n", path)
+
+		msgs, err := runTest()
+		if len(msgs) > 0 {
+			for _, m := range msgs {
+				log.Printf("%v\n", m)
+			}
+		} else if err != nil {
+			log.Printf("Error: %v\n", err)
+		}
 	})
 }
 
@@ -49,4 +60,17 @@ func watchFileWrite(handler fileChangeHandler) error {
 	}
 
 	return nil
+}
+
+func runTest() ([]string, error) {
+	out, err := exec.Command("go", "test", "./...").Output()
+	s := string(out)
+
+	errorMsgs := []string{}
+	for _, l := range strings.Split(s, "\n") {
+		if strings.HasPrefix(l, "FAIL\t") {
+			errorMsgs = append(errorMsgs, l)
+		}
+	}
+	return errorMsgs, err
 }
