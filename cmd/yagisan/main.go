@@ -1,7 +1,13 @@
 package main
 
-import "log"
+import (
+	"log"
+
+	"github.com/yokoe/yagisan/internal/app/yagisan"
+)
 
 func main() {
-	log.Println("yagisan")
+	if err := yagisan.Run(); err != nil {
+		log.Fatalf("Error: %+v\n", err)
+	}
 }
