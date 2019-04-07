@@ -19,7 +19,7 @@ func Run() error {
 
 		msgs, err := runTest()
 		if len(msgs) > 0 {
-			if err := showNotification(msgs[0]); err != nil {
+			if err := showNotification(strings.ReplaceAll(msgs[0], "---", "")); err != nil {
 				log.Printf("Notification error: %+v\n", err)
 			}
 		} else if err != nil {
@@ -71,7 +71,7 @@ func runTest() ([]string, error) {
 
 	errorMsgs := []string{}
 	for _, l := range strings.Split(s, "\n") {
-		if strings.HasPrefix(l, "FAIL\t") {
+		if strings.HasPrefix(l, "---") && strings.Contains(l, "FAIL:") {
 			errorMsgs = append(errorMsgs, l)
 		}
 	}
