@@ -64,8 +64,10 @@ func watchFileWrite(handler fileChangeHandler) error {
 }
 
 func runTest() ([]string, error) {
+	log.Println("Running test...")
 	out, err := exec.Command("go", "test", "./...").Output()
 	s := string(out)
+	log.Println(s)
 
 	errorMsgs := []string{}
 	for _, l := range strings.Split(s, "\n") {
@@ -73,6 +75,7 @@ func runTest() ([]string, error) {
 			errorMsgs = append(errorMsgs, l)
 		}
 	}
+	log.Println("Done.")
 	return errorMsgs, err
 }
 
