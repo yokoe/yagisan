@@ -14,4 +14,4 @@ brew install yagisan
 $ yagisan
 ```
 
-Run `yagisan` on root directory of your golang project.
+Run `yagisan` in root directory of your golang project.
