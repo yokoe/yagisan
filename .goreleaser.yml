@@ -1,0 +1,19 @@
+# .goreleaser.yml
+# Build customization
+builds:
+  - main: cmd/yagisan/main.go
+    binary: yagisan
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+brew:
+  github:
+    owner: yokoe
+    name: homebrew-yagisan
+
+  homepage: "https://github.com/yokoe/yagisan"
+
+  install: |
+    bin.install "yagisan"
